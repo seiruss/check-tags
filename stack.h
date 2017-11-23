@@ -1,0 +1,30 @@
+#ifndef STACK_H
+#define STACK_H
+
+#include <stdbool.h>
+
+/*
+	Check if this top of the stack is empty. Returns true or false.
+*/
+bool is_empty();
+
+/*
+	Adds a new open tag to the stack. Returns nothing.
+*/
+void add_to_top(char tag, int line, int col);
+
+/*
+	Called if remove_from_top returns false. Displays an error
+	showing the unexpected close tag and what tag was expected.
+	Then exits. Returns nothing.
+*/
+void bad_nest(int ch, int line, int col);
+
+/*
+	Checks to see if the current closing tag matches the opening tag.
+	If not, returns false and then bad_nest is called.
+	Otherwise, it frees that tag from the stack and returns true.
+*/
+bool remove_from_top(int ch);
+
+#endif // STACK_H
