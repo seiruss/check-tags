@@ -9,6 +9,21 @@
 bool is_empty();
 
 /*
+	Returns the top tag
+*/
+char get_top_tag();
+
+/*
+	Returns the top line
+*/
+int get_top_line();
+
+/*
+	Returns the top column
+*/
+int get_top_col();
+
+/*
 	Adds a new open tag to the stack. Returns nothing.
 */
 void add_to_top(char tag, int line, int col);
@@ -25,6 +40,6 @@ void bad_nest(int ch, int line, int col);
 	If not, returns false and then bad_nest is called.
 	Otherwise, it frees that tag from the stack and returns true.
 */
-bool remove_from_top(int ch);
+bool remove_from_top(int ch, int line, int col);
 
 #endif // STACK_H

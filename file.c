@@ -34,7 +34,7 @@ FILE *open_file(const char *filename)
 
 void scan_file(FILE *fp)
 {
-	int ch;					// int, not char, to handle EOF
+	int ch;		// int, not char, to handle EOF
 	int line_number = 1;
 	int column = 0;
 
@@ -49,7 +49,7 @@ void scan_file(FILE *fp)
 				break;
 
 			case RIGHT_PARENTHESIS: case RIGHT_BRACKET: case RIGHT_BRACE:
-				if (!remove_from_top(ch))
+				if (!remove_from_top(ch, line_number, column))
 					bad_nest(ch, line_number, column);
 				break;
 
@@ -66,7 +66,8 @@ void scan_file(FILE *fp)
 	if (!is_empty())
 	{
 		fprintf(stderr, "Error: There are open tags that are not closed\n");
-		// TODO: show last one
+		fprintf(stderr, "Tag: %c, Line: %d, Column: %d\n", \
+			get_top_tag(), get_top_line(), get_top_col());
 		exit(EXIT_FAILURE);
 	}
 

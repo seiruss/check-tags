@@ -19,6 +19,42 @@ bool is_empty()
 	return top == NULL;
 }
 
+char get_top_tag()
+{
+	// should never be empty
+	if (is_empty())
+	{
+		fprintf(stderr, "Error: There are no more open tags\n");
+		exit(EXIT_FAILURE);
+	}
+
+	return top->tag;
+}
+
+int get_top_line()
+{
+	// should never be empty
+	if (is_empty())
+	{
+		fprintf(stderr, "Error: There are no more open tags\n");
+		exit(EXIT_FAILURE);
+	}
+
+	return top->line;
+}
+
+int get_top_col()
+{
+	// should never be empty
+	if (is_empty())
+	{
+		fprintf(stderr, "Error: There are no more open tags\n");
+		exit(EXIT_FAILURE);
+	}
+
+	return top->col;
+}
+
 void add_to_top(char tag, int line, int col)
 {
 	struct node *new_node = malloc(sizeof(struct node));
@@ -47,12 +83,12 @@ void bad_nest(int ch, int line, int col)
 	exit(EXIT_FAILURE);
 }
 
-bool remove_from_top(int ch)
+bool remove_from_top(int ch, int line, int col)
 {
 	if (is_empty())
 	{
-		fprintf(stderr, "Error: There are no more open tags for close tag, \
-			%c\n", ch);
+		fprintf(stderr, "Error: No more open tags for close tag, %c ", ch);
+		fprintf(stderr, "on line %d column %d\n", line, col);
 		exit(EXIT_FAILURE);
 	}
 
