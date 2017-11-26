@@ -9,17 +9,17 @@
 bool is_empty();
 
 /*
-	Returns the top tag
+	Returns the top tag.
 */
 char get_top_tag();
 
 /*
-	Returns the top line
+	Returns the top line.
 */
 int get_top_line();
 
 /*
-	Returns the top column
+	Returns the top column.
 */
 int get_top_col();
 
@@ -37,9 +37,9 @@ void bad_nest(int ch, int line, int col);
 
 /*
 	Checks to see if the current closing tag matches the opening tag.
-	If not, returns false and then bad_nest is called.
-	Otherwise, it frees that tag from the stack and returns true.
+	If not, calls bad_nest and exits.
+	Otherwise, it frees that tag from the stack. Returns nothing.
 */
-bool remove_from_top(int ch, int line, int col);
+void remove_from_top(int ch, int line, int col);
 
 #endif // STACK_H

@@ -21,10 +21,9 @@ bool is_empty()
 
 char get_top_tag()
 {
-	// should never be empty
 	if (is_empty())
 	{
-		fprintf(stderr, "Error: There are no more open tags\n");
+		fprintf(stderr, "Error: There are no more open tags.\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -33,10 +32,9 @@ char get_top_tag()
 
 int get_top_line()
 {
-	// should never be empty
 	if (is_empty())
 	{
-		fprintf(stderr, "Error: There are no more open tags\n");
+		fprintf(stderr, "Error: There are no more open tags.\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -45,10 +43,9 @@ int get_top_line()
 
 int get_top_col()
 {
-	// should never be empty
 	if (is_empty())
 	{
-		fprintf(stderr, "Error: There are no more open tags\n");
+		fprintf(stderr, "Error: There are no more open tags.\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -61,7 +58,7 @@ void add_to_top(char tag, int line, int col)
 
 	if (new_node == NULL)
 	{
-		fprintf(stderr, "Error: No memory to add a new tag\n");
+		fprintf(stderr, "Error: No memory to add a new tag.\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -78,12 +75,12 @@ void bad_nest(int ch, int line, int col)
 	fprintf(stderr, "Error: Unexpected close tag, %c on line %d column %d\n", \
 		ch, line, col);
 	fprintf(stderr, "Expected close tag for %c on line %d column %d\n", \
-		top->tag, top->line, top->col);
+		get_top_tag(), get_top_line(), get_top_col());
 
 	exit(EXIT_FAILURE);
 }
 
-bool remove_from_top(int ch, int line, int col)
+void remove_from_top(int ch, int line, int col)
 {
 	if (is_empty())
 	{
@@ -92,10 +89,12 @@ bool remove_from_top(int ch, int line, int col)
 		exit(EXIT_FAILURE);
 	}
 
-	if (top->tag == LEFT_PARENTHESIS && ch != RIGHT_PARENTHESIS || \
-		top->tag == LEFT_BRACKET && ch != RIGHT_BRACKET || \
-		top->tag == LEFT_BRACE && ch != RIGHT_BRACE)
-		return false;
+	char top_tag = get_top_tag();
+
+	if (top_tag == LEFT_PARENTHESIS && ch != RIGHT_PARENTHESIS || \
+		top_tag == LEFT_BRACKET && ch != RIGHT_BRACKET || \
+		top_tag == LEFT_BRACE && ch != RIGHT_BRACE)
+		bad_nest(ch, line, col);
 	else
 	{
 		struct node *temp;
@@ -103,6 +102,4 @@ bool remove_from_top(int ch, int line, int col)
 		top = top->prev;
 		free(temp);
 	}
-
-	return true;
 }

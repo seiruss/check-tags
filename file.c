@@ -6,11 +6,11 @@
 
 char *get_filename(const char *argv[])
 {
-	char *ch = malloc(strlen(argv[1]));
+	char *ch = malloc(strlen(argv[1]) + 1);
 
 	if (ch == NULL)
 	{
-		fprintf(stderr, "Error: Unable to allocate memory for file\n");
+		fprintf(stderr, "Error: Unable to allocate memory for file.\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -25,7 +25,7 @@ FILE *open_file(const char *filename)
 
 	if (fp == NULL)
 	{
-		fprintf(stderr, "Error: Can not open file\n");
+		fprintf(stderr, "Error: Can not open file.\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -49,8 +49,7 @@ void scan_file(FILE *fp)
 				break;
 
 			case RIGHT_PARENTHESIS: case RIGHT_BRACKET: case RIGHT_BRACE:
-				if (!remove_from_top(ch, line_number, column))
-					bad_nest(ch, line_number, column);
+				remove_from_top(ch, line_number, column);
 				break;
 
 			case '\n':
@@ -65,11 +64,11 @@ void scan_file(FILE *fp)
 
 	if (!is_empty())
 	{
-		fprintf(stderr, "Error: There are open tags that are not closed\n");
-		fprintf(stderr, "Tag: %c, Line: %d, Column: %d\n", \
+		fprintf(stderr, "Error: There are open tag(s) that are not closed\n");
+		fprintf(stderr, "Tag: %c on line %d column %d\n", \
 			get_top_tag(), get_top_line(), get_top_col());
 		exit(EXIT_FAILURE);
 	}
 
-	printf("Tags are nested properly\n");
+	printf("Tags are nested properly.\n");
 }

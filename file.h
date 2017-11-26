@@ -16,14 +16,14 @@
 char *get_filename(const char *argv[]);
 
 /*
-	Opens the file in read-only and returns the file pointer
+	Opens the file in read-only and returns the file pointer.
 */
 FILE *open_file(const char *filename);
 
 /*
 	Scans the file for tags and adds or removes them in a linked list.
 	Improperly nested tags are handled elsewhere. Verifies the stack
-	is empty and prints the relevant message. Returns nothing
+	is empty and prints the relevant message. Returns nothing.
 */
 void scan_file(FILE *fp);
 
