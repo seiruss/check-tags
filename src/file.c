@@ -10,7 +10,7 @@ char *get_filename(const char *argv[])
 
 	if (ch == NULL)
 	{
-		fprintf(stderr, "Error: Unable to allocate memory for file.\n");
+		fprintf(stderr, "Error: Unable to allocate memory for file\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -25,7 +25,7 @@ FILE *open_file(const char *filename)
 
 	if (fp == NULL)
 	{
-		fprintf(stderr, "Error: Can not open file.\n");
+		fprintf(stderr, "Error: Can not open file\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -70,5 +70,5 @@ void scan_file(FILE *fp)
 		exit(EXIT_FAILURE);
 	}
 
-	printf("Tags are nested properly.\n");
+	printf("Tags are nested properly\n");
 }

@@ -23,7 +23,7 @@ char get_top_tag()
 {
 	if (is_empty())
 	{
-		fprintf(stderr, "Error: There are no more open tags.\n");
+		fprintf(stderr, "Error: There are no more open tags\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -34,7 +34,7 @@ int get_top_line()
 {
 	if (is_empty())
 	{
-		fprintf(stderr, "Error: There are no more open tags.\n");
+		fprintf(stderr, "Error: There are no more open tags\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -45,7 +45,7 @@ int get_top_col()
 {
 	if (is_empty())
 	{
-		fprintf(stderr, "Error: There are no more open tags.\n");
+		fprintf(stderr, "Error: There are no more open tags\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -58,7 +58,7 @@ void add_to_top(char tag, int line, int col)
 
 	if (new_node == NULL)
 	{
-		fprintf(stderr, "Error: No memory to add a new tag.\n");
+		fprintf(stderr, "Error: No memory to add a new tag\n");
 		exit(EXIT_FAILURE);
 	}
 
