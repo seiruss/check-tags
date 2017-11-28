@@ -1,23 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include "file.h"
 #include "stack.h"
-
-char *get_filename(const char *argv[])
-{
-	char *ch = malloc(strlen(argv[1]) + 1);
-
-	if (ch == NULL)
-	{
-		fprintf(stderr, "Error: Unable to allocate memory for file\n");
-		exit(EXIT_FAILURE);
-	}
-
-	strcpy(ch, argv[1]);
-
-	return ch;
-}
 
 FILE *open_file(const char *filename)
 {
@@ -65,8 +49,15 @@ void scan_file(FILE *fp)
 	if (!is_empty())
 	{
 		fprintf(stderr, "Error: There are open tag(s) that are not closed\n");
+
+		/*	Can not show the problem tag here as it will
+			always show the top most tag even if it is
+			not the problem tag.
+
 		fprintf(stderr, "Tag: %c on line %d column %d\n", \
 			get_top_tag(), get_top_line(), get_top_col());
+		*/
+
 		exit(EXIT_FAILURE);
 	}
 

@@ -16,38 +16,35 @@ struct node *top = NULL;
 
 bool is_empty()
 {
-	return top == NULL;
+	return (top == NULL);
 }
 
-char get_top_tag()
+static void no_open_tag()
+{
+	fprintf(stderr, "Error: There are no more open tags\n");
+	exit(EXIT_FAILURE);
+}
+
+static char get_top_tag()
 {
 	if (is_empty())
-	{
-		fprintf(stderr, "Error: There are no more open tags\n");
-		exit(EXIT_FAILURE);
-	}
+		no_open_tag();
 
 	return top->tag;
 }
 
-int get_top_line()
+static int get_top_line()
 {
 	if (is_empty())
-	{
-		fprintf(stderr, "Error: There are no more open tags\n");
-		exit(EXIT_FAILURE);
-	}
+		no_open_tag();
 
 	return top->line;
 }
 
-int get_top_col()
+static int get_top_col()
 {
 	if (is_empty())
-	{
-		fprintf(stderr, "Error: There are no more open tags\n");
-		exit(EXIT_FAILURE);
-	}
+		no_open_tag();
 
 	return top->col;
 }
@@ -70,22 +67,18 @@ void add_to_top(char tag, int line, int col)
 	top = new_node;
 }
 
-void bad_nest(int ch, int line, int col)
-{
-	fprintf(stderr, "Error: Unexpected close tag, %c on line %d column %d\n", \
-		ch, line, col);
-	fprintf(stderr, "Expected close tag for %c on line %d column %d\n", \
-		get_top_tag(), get_top_line(), get_top_col());
-
-	exit(EXIT_FAILURE);
-}
-
 void remove_from_top(int ch, int line, int col)
 {
 	if (is_empty())
 	{
+		/*	Can not show the problem tag here as it will always show
+			one of the last tags even if that is not the problem.
+
 		fprintf(stderr, "Error: No more open tags for close tag, %c ", ch);
 		fprintf(stderr, "on line %d column %d\n", line, col);
+		*/
+
+		fprintf(stderr, "Error: There are more close tags than open tags\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -94,12 +87,17 @@ void remove_from_top(int ch, int line, int col)
 	if (top_tag == LEFT_PARENTHESIS && ch != RIGHT_PARENTHESIS || \
 		top_tag == LEFT_BRACKET && ch != RIGHT_BRACKET || \
 		top_tag == LEFT_BRACE && ch != RIGHT_BRACE)
-		bad_nest(ch, line, col);
-	else
 	{
-		struct node *temp;
-		temp = top;
-		top = top->prev;
-		free(temp);
+		fprintf(stderr, "Error: Unexpected close tag, %c on line %d column %d\n", \
+		ch, line, col);
+		fprintf(stderr, "Expected close tag for %c on line %d column %d\n", \
+		get_top_tag(), get_top_line(), get_top_col());
+
+		exit(EXIT_FAILURE);
 	}
+
+	struct node *temp;
+	temp = top;
+	top = top->prev;
+	free(temp);
 }
