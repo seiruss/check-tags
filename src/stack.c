@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include "stack.h"
 #include "file.h"
 
@@ -14,7 +13,7 @@ struct node
 
 struct node *top = NULL;
 
-bool is_empty()
+BOOL is_empty()
 {
 	return (top == NULL);
 }
@@ -67,13 +66,16 @@ void add_to_top(char tag, int line, int col)
 	top = new_node;
 }
 
-void remove_from_top(int ch, int line, int col)
+void remove_from_top(int tag, int line, int col)
 {
 	if (is_empty())
 	{
-		/*	Can not show the problem tag here as it will always show
-			one of the last tags even if that is not the problem.
+		/*
+		*	Can not show the problem tag here as it will always show
+		*	one of the last tags even if that is not the problem.
+		*/
 
+		/*
 		fprintf(stderr, "Error: No more open tags for close tag, %c ", ch);
 		fprintf(stderr, "on line %d column %d\n", line, col);
 		*/
@@ -84,12 +86,12 @@ void remove_from_top(int ch, int line, int col)
 
 	char top_tag = get_top_tag();
 
-	if (top_tag == LEFT_PARENTHESIS && ch != RIGHT_PARENTHESIS || \
-		top_tag == LEFT_BRACKET && ch != RIGHT_BRACKET || \
-		top_tag == LEFT_BRACE && ch != RIGHT_BRACE)
+	if (top_tag == LEFT_PARENTHESIS && tag != RIGHT_PARENTHESIS || \
+		top_tag == LEFT_BRACKET && tag != RIGHT_BRACKET || \
+		top_tag == LEFT_BRACE && tag != RIGHT_BRACE)
 	{
 		fprintf(stderr, "Error: Unexpected close tag, %c on line %d column %d\n", \
-		ch, line, col);
+		tag, line, col);
 		fprintf(stderr, "Expected close tag for %c on line %d column %d\n", \
 		get_top_tag(), get_top_line(), get_top_col());
 

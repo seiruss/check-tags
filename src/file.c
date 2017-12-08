@@ -16,9 +16,9 @@ FILE *open_file(const char *filename)
 	return fp;
 }
 
-void scan_file(FILE *fp)
+BOOL scan_file(FILE *fp)
 {
-	int ch;		// int, not char, to handle EOF
+	int ch;		/* int, not char, to handle EOF */
 	int line_number = 1;
 	int column = 0;
 
@@ -48,18 +48,17 @@ void scan_file(FILE *fp)
 
 	if (!is_empty())
 	{
-		fprintf(stderr, "Error: There are open tag(s) that are not closed\n");
-
-		/*	Can not show the problem tag here as it will
-			always show the top most tag even if it is
-			not the problem tag.
-
-		fprintf(stderr, "Tag: %c on line %d column %d\n", \
-			get_top_tag(), get_top_line(), get_top_col());
+		/*
+		*	Can not show the problem tag here as it will
+		*	always show the top most tag even if it is
+		*	not the problem tag.
 		*/
 
-		exit(EXIT_FAILURE);
+		/* fprintf(stderr, "Tag: %c on line %d column %d\n", \
+			get_top_tag(), get_top_line(), get_top_col()); */
+
+		return TRUE;
 	}
 
-	printf("Tags are nested properly\n");
+	return FALSE;
 }
