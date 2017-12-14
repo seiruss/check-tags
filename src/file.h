@@ -9,9 +9,13 @@
 #define LEFT_BRACE			'{'
 #define RIGHT_BRACE			'}'
 
-typedef int BOOL;
-#define TRUE 1
-#define FALSE 0
+/* Comments to check for in the file */
+#define POUND_SIGN			'#'
+#define ASTERISK			'*'
+#define FORWARD_SLASH		'/'
+#define SINGLE_QUOTE		'\''
+#define DOUBLE_QUOTE		'\"'
+#define NEWLINE				'\n'
 
 
 /*
@@ -20,15 +24,23 @@ typedef int BOOL;
 	@param	filename	file name from argv[1].
 	@return				file pointer to filename.
 */
-FILE *open_file(const char *filename);
+static FILE *open_file(const char *filename);
+
+/*
+	Peeks at the next character in a stream.
+
+	@param	fp	file stream.
+	@return		next character.
+*/
+static int fpeek(FILE *fp);
 
 /*
 	Scans the file for tags and adds or removes them in a linked list.
 	Verifies the stack is empty and prints the relevant message.
 
 	@param	fp	file to scan.
-	@return		true - failure, false - success.
+	@return		esit_success or exit_failure
 */
-BOOL scan_file(FILE *fp);
+int scan_file();
 
-#endif
+#endif /* FILE_H */
