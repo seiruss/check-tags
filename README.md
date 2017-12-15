@@ -3,4 +3,4 @@ This program will scan a file and verify all parentheses, brackets, and braces a
 There are flags to disable scanning on lines in comments.
 
 Usage:<br />
-check_tags [OPTIONS] <FILE>
+check_tags [OPTIONS] \<FILE\>
