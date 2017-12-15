@@ -4,11 +4,8 @@
 /* Program argument options */
 struct
 {
-	const char *file_name;			/* Name of file to scan */
-	bool verbose;					/* Print verbose messages */
-	const char *verbose_file_name;	/* Verbose output file name */
-	FILE *verbose_file_output;		/* Stream to output file */
-	bool verbose_file_open;			/* Is the verbose file stream open */
+	const char *file_name;
+	bool verbose;
 	bool pound;
 	bool single;
 	bool multi;
@@ -20,15 +17,8 @@ struct
 /* Print to stderr */
 #define PRINTE(...) fprintf(stderr, "Error: "); fprintf(stderr, __VA_ARGS__);
 
-/* Print to file */
-#define PRINTF(...) if (options.verbose_file_open) \
-		fprintf(options.verbose_file_output, __VA_ARGS__);
-
 /* Print verbose messages */
 #define PRINTV(...) if (options.verbose) PRINT(__VA_ARGS__);
-
-/* Print verbose messages to screen and/or file */
-#define PRINTVF(...) PRINTF(__VA_ARGS__); PRINTV(__VA_ARGS__);
 
 
 /*

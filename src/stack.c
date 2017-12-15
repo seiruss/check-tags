@@ -52,7 +52,7 @@ int add_to_top(char tag, int line, int col)
 	new_node->prev = top;
 	top = new_node;
 
-	PRINTVF("Added %6c %6d %6d\n", tag, line, col);
+	PRINTV("Added %6c %6d %6d\n", tag, line, col);
 
 	return EXIT_SUCCESS;
 }
@@ -93,7 +93,7 @@ int remove_from_top(int tag, int line, int col)
 	top = top->prev;
 	free(temp);
 
-	PRINTVF("Removed %4c %6d %6d\n", tag, line, col);
+	PRINTV("Removed %4c %6d %6d\n", tag, line, col);
 
 	return EXIT_SUCCESS;
 }

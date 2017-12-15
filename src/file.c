@@ -8,14 +8,14 @@
 
 static FILE *open_file(const char *filename)
 {
-	PRINTVF("Opening file, %s\n", filename);
+	PRINTV("Opening file, %s\n", filename);
 
 	FILE *fp = fopen(filename, "r");
 
 	if (fp == NULL)
 		return NULL;
 
-	PRINTVF("Opened file, %s\n", filename);
+	PRINTV("Opened file, %s\n", filename);
 
 	return fp;
 }
@@ -48,12 +48,11 @@ int scan_file()
 		return EXIT_FAILURE;
 	}
 
-	if (options.verbose_file_open || options.verbose)
-	{
-		//PRINTVF("\t\t%s\t%s\n", "Line", "Col");
-		PRINTVF("%20s %6s\n", "Line", "Col");
-	}
+	/* Verbose header */
+	if (options.verbose)
+		PRINTV("\n%20s %6s\n", "Line", "Col");
 
+	/* Main loop to scan file */
 	while ((ch = fgetc(fp)) != EOF)
 	{
 		++column;
