@@ -1,4 +1,6 @@
 # check-tags
-This will check if all open Parentheses, Brackets, and Braces have matching closing tags.
+This program will scan a file and verify all parentheses, brackets, and braces are open and closed properly.<br />
+There are flags to disable scanning on lines in comments.
 
-Usage: check_tags [FILE]
+Usage:<br />
+check_tags [OPTIONS] <FILE>
