@@ -7,8 +7,10 @@ struct
 	const char *file_name;
 	bool verbose;
 	bool pound;
-	bool single;
-	bool multi;
+	bool slash;
+	bool asterisk;
+	bool s_quote;
+	bool d_quote;
 } options;
 
 /* Print to screen */

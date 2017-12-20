@@ -11,35 +11,47 @@ static FILE *open_file(const char *filename)
 	PRINTV("Opening file, %s\n", filename);
 
 	FILE *fp = fopen(filename, "r");
-
-	if (fp == NULL)
-		return NULL;
-
-	PRINTV("Opened file, %s\n", filename);
-
 	return fp;
 }
 
-static int fpeek(FILE *fp)
+static bool in_multi_comment(int ch, int prev, FILE *fp)
 {
-	int ch;
+	if (!comments.multi)
+		return false;
 
-	ch = fgetc(fp);
-	ungetc(ch, fp);
+	/* asterisk */
+	if ((comments.slash && !comments.s_quote && !comments.d_quote) && \
+		(ch == FORWARD_SLASH && prev == ASTERISK))
+	{
+		comments.multi = false;
+		comments.slash = false;
+	}
 
-	return ch;
+	/* single quote */
+	if ((comments.s_quote && !comments.d_quote && !comments.slash) && \
+		(ch == SINGLE_QUOTE))
+	{
+		comments.multi = false;
+		comments.s_quote = false;
+	}
+
+	/* double quote */
+	if ((comments.d_quote && !comments.s_quote && !comments.slash) && \
+		(ch == DOUBLE_QUOTE))
+	{
+		comments.multi = false;
+		comments.d_quote = false;
+	}
+
+	return true;
 }
 
 int scan_file()
 {
 	int ch;		/* int, not char, to handle EOF */
-	int line_number = 1;
+	int line = 1;
 	int column = 0;
-	int peek;
-	bool single_comment = false;
-	bool multi_comment = false;
-	bool slash = false;
-	bool quote = false;
+	int prev = 0;
 
 	FILE *fp = open_file(options.file_name);
 	if (fp == NULL)
@@ -47,6 +59,8 @@ int scan_file()
 		PRINTE("Can not open file\n");
 		return EXIT_FAILURE;
 	}
+	else
+		PRINTV("Opened file, %s\n", options.file_name);
 
 	/* Verbose header */
 	if (options.verbose)
@@ -57,86 +71,85 @@ int scan_file()
 	{
 		++column;
 
-		/* Ignore spaces, tabs, letters and numbers for performance */
-		if (ch != NEWLINE && isblank(ch) || isalnum(ch))
-			continue;
-
-		if (multi_comment)
+		/* Must scan newline for single comment, line number, column */
+		if (ch != NEWLINE)
 		{
-			if ((quote && !slash) && (ch == SINGLE_QUOTE || ch == DOUBLE_QUOTE))
-			{
-				multi_comment = false;
-				quote = false;
-			}
-
-			if ((slash && !quote) && (ch == ASTERISK && \
-				(peek = fpeek(fp)) != EOF && peek == FORWARD_SLASH))
-			{
-				multi_comment = false;
-				slash = false;
-			}
-
-			/* Ignore all except newline that do not end the multi comment */
-			if (ch != NEWLINE)
+			/* Ignore spaces, tabs, letters and numbers for performance */
+			if (isblank(ch) || isalnum(ch))
 				continue;
+
+			/* Ignore all characters that do not end comments */
+			if (comments.single || in_multi_comment(ch, prev, fp))
+			{
+				prev = ch;	/* terminates multi comment */
+				continue;
+			}
 		}
 
 		switch (ch)
 		{
 			case NEWLINE:
-				++line_number;
+				++line;
 				column = 0;
-				single_comment = false;
+				comments.single = false;
 				break;
 
 			case LEFT_PARENTHESIS:
 			case LEFT_BRACKET:
 			case LEFT_BRACE:
-				if (!single_comment && !multi_comment)
-					if (add_to_top(ch, line_number, column))
+				if (!comments.single && !comments.multi)
+					if (add_to_top(ch, line, column))
 						return EXIT_FAILURE;
 				break;
 
 			case RIGHT_PARENTHESIS:
 			case RIGHT_BRACKET:
 			case RIGHT_BRACE:
-				if (!single_comment && !multi_comment)
-					if (remove_from_top(ch, line_number, column))
+				if (!comments.single && !comments.multi)
+					if (remove_from_top(ch, line, column))
 						return EXIT_FAILURE;
 				break;
 
 			case POUND_SIGN:
 				if (options.pound)
-					single_comment = true;
+					comments.single = true;
 				break;
 
 			case FORWARD_SLASH:
-				if ((peek = fpeek(fp)) != EOF)
+				if (prev == FORWARD_SLASH && options.slash)
+					comments.single = true;
+				break;
+
+			case ASTERISK:
+				if (prev == FORWARD_SLASH && options.asterisk && \
+					!comments.s_quote && !comments.d_quote)
 				{
-					if (peek == FORWARD_SLASH && options.single)
-					{
-						single_comment = true;
-					}
-					else if (peek == ASTERISK && options.multi && !quote)
-					{
-						multi_comment = true;
-						slash = true;
-					}
+					comments.multi = true;
+					comments.slash = true;
 				}
 				break;
 
 			case SINGLE_QUOTE:
-			case DOUBLE_QUOTE:
-				if (options.multi && !slash)
+				if (options.s_quote && !comments.slash && !comments.d_quote)
 				{
-					multi_comment = true;
-					quote = true;
+					comments.multi = true;
+					comments.s_quote = true;
+				}
+				break;
+
+			case DOUBLE_QUOTE:
+				if (options.d_quote && !comments.slash && !comments.s_quote)
+				{
+					comments.multi = true;
+					comments.d_quote = true;
 				}
 				break;
 
 			default:
 				break;
 		}
+
+		prev = ch;
 	}
 
 	if (!is_empty())

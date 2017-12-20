@@ -3,14 +3,14 @@
 #include <stdbool.h>
 #include <getopt.h>
 #include "check_tags.h"
-#include "file.h"
-#include "stack.h"
 
 /*
 	Check open and close tags in a file to determine
 	if they are nested properly. Uses a linked list
 	to store each tag's char, line, and column number.
 */
+
+int scan_file();
 
 static bool exit_after_args = false;
 
@@ -29,18 +29,18 @@ static void usage(char *argv[])
 		"  -h, --help	    Display this help\n"
 		"  -V, --version	    version information\n"
 		"  -v, --verbose	    verbose output\n\n"
-		"Scanning options:\n"
-		"  -p	ignore tags after # on same line\n"
-		"  -s	ignore tags after // on same line\n"
-		"  -m	ignore tags between /* */ on multiple lines\n"
-		"  -u	ignore tags between \' \' on multiple lines\n"
-		"  -q	ignore tags between \" \" on multiple lines\n"
-		"  -a	ignore tags between all comments\n\n");
+		"Scanning options to ignore tags:\n"
+		"  -p	after # on same line\n"
+		"  -s	after // on same line\n"
+		"  -k	between /* */ on multiple lines\n"
+		"  -u	between single quotes on multiple lines\n"
+		"  -q	between double quotes on multiple lines\n"
+		"  -a	ignore tags in all comments\n\n");
 }
 
 static void version(char *argv[])
 {
-	PRINT("%s 1.0\n", argv[0]);
+	PRINT("%s 1.1\n", argv[0]);
 	PRINT("Written by Russell Seifert\n");
 	PRINT("Contribute at <https://github.com/seiruss/check-tags>\n\n");
 }
@@ -51,7 +51,7 @@ static int parse_args(int argc, char *argv[])
 	int option_index = 0;
 	opterr = 0; /* getopt() does not print its own error message */
 
-	while ((c = getopt_long(argc, argv, "vVhampqsu",
+	while ((c = getopt_long(argc, argv, "vVhpskuqa",
 				long_options, &option_index)) != -1)
 	{
 		switch (c)
@@ -61,28 +61,38 @@ static int parse_args(int argc, char *argv[])
 				options.verbose = true;
 				break;
 
-			/* all options */
-			case 'a':
-				options.single = true;
-				options.multi = true;
-				options.pound = true;
-				break;
-
-			/* multi line comment */
-			case 'm':
-			case 'q':
-			case 'u':
-				options.multi = true;
-				break;
-
-			/* pound sign comment */
+			/* pound sign */
 			case 'p':
 				options.pound = true;
 				break;
 
-			/* single line comment */
+			/* slash */
 			case 's':
-				options.single = true;
+				options.slash = true;
+				break;
+
+			/* asterisk */
+			case 'k':
+				options.asterisk = true;
+				break;
+
+			/* single quote */
+			case 'u':
+				options.s_quote = true;
+				break;
+
+			/* double quote */
+			case 'q':
+				options.d_quote = true;
+				break;
+
+			/* all options */
+			case 'a':
+				options.pound = true;
+				options.slash = true;
+				options.asterisk = true;
+				options.s_quote = true;
+				options.d_quote = true;
 				break;
 
 			/* version */
@@ -123,8 +133,9 @@ static int parse_args(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	PRINTV("Options: single=%d, multi=%d, pound=%d\n", options.single, \
-		options.multi, options.pound);
+	PRINTV("Options: pound=%d, slash=%d, asterisk=%d, s_quote=%d, "
+		"d_quote=%d\n", options.pound, options.slash, options.asterisk, \
+		options.s_quote, options.d_quote);
 
 	return EXIT_SUCCESS;
 }

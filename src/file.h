@@ -11,11 +11,21 @@
 
 /* Comments to check for in the file */
 #define POUND_SIGN			'#'
-#define ASTERISK			'*'
 #define FORWARD_SLASH		'/'
+#define ASTERISK			'*'
 #define SINGLE_QUOTE		'\''
 #define DOUBLE_QUOTE		'\"'
 #define NEWLINE				'\n'
+
+/* Scanning options in comments */
+struct
+{
+	bool single;
+	bool multi;
+	bool slash;
+	bool s_quote;
+	bool d_quote;
+} comments;
 
 
 /*
@@ -27,19 +37,22 @@
 static FILE *open_file(const char *filename);
 
 /*
-	Peeks at the next character in a stream.
+	Checks if in a multi line comment and if it should be terminated.
+	Returns true even on characters that end the multi line comment.
+	This is because that character would be scanned when it should not be.
 
-	@param	fp	file stream.
-	@return		next character.
+	@param	ch		character to process.
+	@param	prev	previous character seen.
+	@param	fp		file stream.
+	@return			true if in multi comment, false if not.
 */
-static int fpeek(FILE *fp);
+static bool in_multi_comment(int ch, int prev, FILE *fp);
 
 /*
 	Scans the file for tags and adds or removes them in a linked list.
 	Verifies the stack is empty and prints the relevant message.
 
-	@param	fp	file to scan.
-	@return		esit_success or exit_failure
+	@return		exit_success or exit_failure
 */
 int scan_file();
 
