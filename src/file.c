@@ -166,6 +166,8 @@ int scan_file()
 		return EXIT_FAILURE;
 	}
 
-	PRINT("Tags are nested properly\n");
+	if (!options.quiet)
+		PRINT("Tags are nested properly\n");
+
 	return EXIT_SUCCESS;
 }

@@ -6,6 +6,7 @@ struct
 {
 	const char *file_name;
 	bool verbose;
+	bool quiet;
 	bool pound;
 	bool slash;
 	bool asterisk;
@@ -26,23 +27,31 @@ struct
 /*
 	Program usage.
 
-	@param	argv	show program name
+	@param	argv	show program name.
 */
 static void usage(char *argv[]);
 
 /*
+	Program short usage on syntax errors.
+
+	@param	argv	show program name.
+	@param	msg		message to display.
+*/
+static void usage_short(char *argv[], char *msg);
+
+/*
 	Program version.
 
-	@param	argv	show program name
+	@param	argv	show program name.
 */
 static void version(char *argv[]);
 
 /*
 	Parse program arguments.
 
-	@param	argc	argument count
-	@param	argv	argument array
-	@return			exit_success or exit_failure
+	@param	argc	argument count.
+	@param	argv	argument array.
+	@return			exit_success or exit_failure.
 */
 static int parse_args(int argc, char *argv[]);
 

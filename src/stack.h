@@ -24,7 +24,7 @@ bool is_empty();
 /*
 	Get the top tag, line or column in the linked list.
 
-	@param	c	option to select node type
+	@param	c	option to select node type.
 	@return		top tag, line or column.
 */
 static int get_top_tag(int c);
@@ -37,7 +37,7 @@ static int get_top_tag(int c);
 	@param	tag		tag to add.
 	@param	line	line to add.
 	@param	col		column to add.
-	@return			exit_success or exit_failure
+	@return			exit_success or exit_failure.
 */
 int add_to_top(char tag, int line, int col);
 
@@ -51,7 +51,7 @@ int add_to_top(char tag, int line, int col);
 	@param	tag		tag to remove.
 	@param	line	line number of the tag.
 	@param	col		column number of the tag.
-	@return			exit_success or exit_failure
+	@return			exit_success or exit_failure.
 */
 int remove_from_top(int tag, int line, int col);
 

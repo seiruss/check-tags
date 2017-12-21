@@ -52,7 +52,7 @@ static bool in_multi_comment(int ch, int prev, FILE *fp);
 	Scans the file for tags and adds or removes them in a linked list.
 	Verifies the stack is empty and prints the relevant message.
 
-	@return		exit_success or exit_failure
+	@return		exit_success or exit_failure.
 */
 int scan_file();
 

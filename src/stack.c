@@ -69,8 +69,7 @@ int remove_from_top(int tag, int line, int col)
 		/* fprintf(stderr, "Error: No more open tags for close tag, %c ", ch);
 		fprintf(stderr, "on line %d column %d\n", line, col); */
 
-		PRINTE("There are more close tags than open tags\n"
-			"Problem with tag, %c on line %d column %d\n", tag, line, col);
+		PRINTE("There are more close tags than open tags\n");
 		return EXIT_FAILURE;
 	}
 
