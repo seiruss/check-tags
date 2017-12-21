@@ -6,7 +6,8 @@ Usage: check_tags [OPTIONS] \<FILE\><br />
 Miscellaneous:<br />
 &nbsp;&nbsp;-h, --help&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Display this help<br />
 &nbsp;&nbsp;-V, --version&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;version information<br />
-&nbsp;&nbsp;-v, --verbose&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;verbose output<br /><br />
+&nbsp;&nbsp;-v, --verbose&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;verbose output<br />
+&nbsp;&nbsp;-q, --quiet&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;suppress normal output<br /><br />
 Scanning options to ignore tags:<br />
 &nbsp;&nbsp;-p&nbsp;&nbsp;&nbsp;&nbsp;after # on same line<br />
 &nbsp;&nbsp;-s&nbsp;&nbsp;&nbsp;&nbsp;after // on same line<br />
