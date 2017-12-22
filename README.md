@@ -12,6 +12,6 @@ Scanning options to ignore tags:<br />
 &nbsp;&nbsp;-p&nbsp;&nbsp;&nbsp;&nbsp;after # on same line<br />
 &nbsp;&nbsp;-s&nbsp;&nbsp;&nbsp;&nbsp;after // on same line<br />
 &nbsp;&nbsp;-c&nbsp;&nbsp;&nbsp;&nbsp;between /* */ on multiple lines<br />
-&nbsp;&nbsp;-i&nbsp;&nbsp;&nbsp;&nbsp;between single quotes on multiple lines<br />
+&nbsp;&nbsp;-i&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;between single quotes on multiple lines<br />
 &nbsp;&nbsp;-d&nbsp;&nbsp;&nbsp;&nbsp;between double quotes on multiple lines<br />
 &nbsp;&nbsp;-a&nbsp;&nbsp;&nbsp;&nbsp;ignore tags in all comments<br />
