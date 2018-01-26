@@ -5,4 +5,4 @@ TARGET = check_tags
 SRC = $(wildcard src/*.c)
 
 $(TARGET):
-	$(CC) $(CFLAGS) $(SRC) -o $(TARGET)
+	$(CC) $(CFLAGS) $(SRC) -o $@
