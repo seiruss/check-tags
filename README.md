@@ -17,3 +17,8 @@ There are flags to disable scanning on lines in comments.
       -i    between single quotes on multiple lines
       -d    between double quotes on multiple lines
       -a    ignore tags in all comments
+
+## Install ##
+    git clone https://github.com/seiruss/check-tags
+    cd check-tags
+    make
