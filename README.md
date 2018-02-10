@@ -22,3 +22,11 @@ There are flags to disable scanning on lines in comments.
     git clone https://github.com/seiruss/check-tags
     cd check-tags
     make
+
+Build with debug symbols:
+
+    make debug
+    
+Remove the program:
+
+    make clean
