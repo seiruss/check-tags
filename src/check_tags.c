@@ -23,6 +23,11 @@ static struct option long_options[] =
 	{ 0, 0, 0, 0 }
 };
 
+/*
+	Program usage.
+
+	@param	argv	show program name.
+*/
 static void usage(char *argv[])
 {
 	PRINT("Usage: %s [OPTIONS] <FILE>\n\n", argv[0]);
@@ -40,6 +45,12 @@ static void usage(char *argv[])
 		"  -a	ignore tags in all comments\n\n");
 }
 
+/*
+	Program short usage on syntax errors.
+
+	@param	argv	show program name.
+	@param	msg		message to display.
+*/
 static void usage_short(char *argv[], char *msg)
 {
 	PRINTE("%s\n"
@@ -47,13 +58,25 @@ static void usage_short(char *argv[], char *msg)
 		"Try '%s --help' for more information\n\n", msg, argv[0], argv[0]);
 }
 
+/*
+	Program version.
+
+	@param	argv	show program name.
+*/
 static void version(char *argv[])
 {
-	PRINT("%s 1.2\n", argv[0]);
+	PRINT("%s 1.3\n", argv[0]);
 	PRINT("Written by Russell Seifert\n");
 	PRINT("Contribute at <https://github.com/seiruss/check-tags>\n\n");
 }
 
+/*
+	Parse program arguments.
+
+	@param	argc	argument count.
+	@param	argv	argument array.
+	@return			exit_success or exit_failure.
+*/
 static int parse_args(int argc, char *argv[])
 {
 	int c;

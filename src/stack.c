@@ -7,11 +7,22 @@
 
 struct node *top = NULL;
 
+/*
+	Check if the top of the stack is empty.
+
+	@return	true - stack is empty, false - stack is not empty.
+*/
 bool is_empty()
 {
 	return (top == NULL);
 }
 
+/*
+	Get the top tag, line or column in the linked list.
+
+	@param	c	option to select node type.
+	@return		top tag, line or column.
+*/
 static int get_top_tag(int c)
 {
 	if (is_empty())
@@ -35,6 +46,16 @@ static int get_top_tag(int c)
 	return EXIT_FAILURE;
 }
 
+/*
+	Add tag
+
+	Adds a new open tag to the stack.
+
+	@param	tag		tag to add.
+	@param	line	line to add.
+	@param	col		column to add.
+	@return			exit_success or exit_failure.
+*/
 int add_to_top(char tag, int line, int col)
 {
 	struct node *new_node = malloc(sizeof(struct node));
@@ -57,6 +78,18 @@ int add_to_top(char tag, int line, int col)
 	return EXIT_SUCCESS;
 }
 
+/*
+	Remove tag
+
+	Checks to see if the current closing tag matches the opening tag.
+	If not, displays an error showing the unexpected close tag and
+	what tag was expected. Otherwise, it frees that tag from the stack.
+
+	@param	tag		tag to remove.
+	@param	line	line number of the tag.
+	@param	col		column number of the tag.
+	@return			exit_success or exit_failure.
+*/
 int remove_from_top(int tag, int line, int col)
 {
 	if (is_empty())
@@ -77,13 +110,14 @@ int remove_from_top(int tag, int line, int col)
 	if (top_tag == EXIT_FAILURE)
 		return EXIT_FAILURE;
 
-	if (top_tag == LEFT_PARENTHESIS && tag != RIGHT_PARENTHESIS || \
-		top_tag == LEFT_BRACKET && tag != RIGHT_BRACKET || \
-		top_tag == LEFT_BRACE && tag != RIGHT_BRACE)
+	if ((top_tag == LEFT_PARENTHESIS && tag != RIGHT_PARENTHESIS) || \
+		(top_tag == LEFT_BRACKET && tag != RIGHT_BRACKET) || \
+		(top_tag == LEFT_BRACE && tag != RIGHT_BRACE))
 	{
 		PRINTE("Unexpected close tag, %c on line %d column %d\n"
 			"Expected close tag for %c on line %d column %d\n", \
-			tag, line, col, top_tag, get_top_tag(TOP_LINE), get_top_tag(TOP_COL));
+			tag, line, col, top_tag, get_top_tag(TOP_LINE), \
+			get_top_tag(TOP_COL));
 
 		return EXIT_FAILURE;
 	}
