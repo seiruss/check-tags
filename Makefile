@@ -1,19 +1,17 @@
 CC = gcc
-CFLAGS = -std=c99
-DEBUG = -g -Wall -Werror
+CFLAGS = -std=c99 -Wall -Werror -pedantic
 SRC = $(wildcard src/*.c)
 TARGET = check_tags.out
 
-.PHONY: default all debug clean
+.PHONY: all debug clean
 
-default: $(TARGET)
-all: default
+all: $(TARGET)
 
 $(TARGET):
 	$(CC) $(CFLAGS) -s $(SRC) -o $@
 
 debug:
-	$(CC) $(CFLAGS) $(DEBUG) $(SRC) -o $(TARGET)
+	$(CC) $(CFLAGS) -g $(SRC) -o $(TARGET)
 
 clean:
 	rm -f $(TARGET)
