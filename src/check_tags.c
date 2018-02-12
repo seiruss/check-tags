@@ -5,10 +5,10 @@
 #include "check_tags.h"
 
 /*
-	Check open and close tags in a file to determine
-	if they are nested properly. Uses a linked list
-	to store each tag's char, line, and column number.
-*/
+ * Check open and close tags in a file to determine
+ * if they are nested properly. Uses a linked list
+ * to store each tag's char, line, and column number.
+ */
 
 int scan_file();
 
@@ -24,10 +24,10 @@ static struct option long_options[] =
 };
 
 /*
-	Program usage.
-
-	@param	argv	show program name.
-*/
+ * Program usage.
+ *
+ * @param	argv	show program name.
+ */
 static void usage(char *argv[])
 {
 	PRINT("Usage: %s [OPTIONS] <FILE>\n\n", argv[0]);
@@ -46,11 +46,11 @@ static void usage(char *argv[])
 }
 
 /*
-	Program short usage on syntax errors.
-
-	@param	argv	show program name.
-	@param	msg		message to display.
-*/
+ * Program short usage on syntax errors.
+ *
+ * @param	argv	show program name.
+ * @param	msg	message to display.
+ */
 static void usage_short(char *argv[], char *msg)
 {
 	PRINTE("%s\n"
@@ -59,10 +59,10 @@ static void usage_short(char *argv[], char *msg)
 }
 
 /*
-	Program version.
-
-	@param	argv	show program name.
-*/
+ * Program version.
+ *
+ * @param	argv	show program name.
+ */
 static void version(char *argv[])
 {
 	PRINT("%s 1.3\n", argv[0]);
@@ -71,12 +71,12 @@ static void version(char *argv[])
 }
 
 /*
-	Parse program arguments.
-
-	@param	argc	argument count.
-	@param	argv	argument array.
-	@return			exit_success or exit_failure.
-*/
+ * Parse program arguments.
+ *
+ * @param	argc	argument count.
+ * @param	argv	argument array.
+ * @return		exit_success or exit_failure.
+ */
 static int parse_args(int argc, char *argv[])
 {
 	int c;
@@ -86,93 +86,67 @@ static int parse_args(int argc, char *argv[])
 	while ((c = getopt_long(argc, argv, "vVhqpscida",
 				long_options, &option_index)) != -1)
 	{
-		switch (c)
-		{
-			/* verbose */
-			case 'v':
-				options.verbose = true;
-				break;
-
-			/* quiet */
-			case 'q':
-				options.quiet = true;
-				break;
-
-			/* pound sign */
-			case 'p':
-				options.pound = true;
-				break;
-
-			/* slash */
-			case 's':
-				options.slash = true;
-				break;
-
-			/* asterisk */
-			case 'c':
-				options.asterisk = true;
-				break;
-
-			/* single quote */
-			case 'i':
-				options.s_quote = true;
-				break;
-
-			/* double quote */
-			case 'd':
-				options.d_quote = true;
-				break;
-
-			/* all options */
-			case 'a':
-				options.pound = true;
-				options.slash = true;
-				options.asterisk = true;
-				options.s_quote = true;
-				options.d_quote = true;
-				break;
-
-			/* version */
-			case 'V':
-				version(argv);
-				exit_after_args = true;
-				return EXIT_SUCCESS;
-
-			case '?':
-				PRINTE("Invalid option '%s'\n"
-					"Usage: %s [OPTIONS] <FILE>\n"
-					"Try '%s --help' for more information\n\n", \
-					argv[optind - 1], argv[0], argv[0]);
-				return EXIT_FAILURE;
-
-			case 'h':
-				usage(argv);
-				exit_after_args = true;
-				return EXIT_SUCCESS;
-
-			default:
-				usage(argv);
-				return EXIT_FAILURE;
+		switch (c) {
+		case 'v':
+			options.verbose = true;
+			break;
+		case 'q':
+			options.quiet = true;
+			break;
+		case 'p':
+			options.pound = true;
+			break;
+		case 's':
+			options.slash = true;
+			break;
+		case 'c':
+			options.asterisk = true;
+			break;
+		case 'i':
+			options.s_quote = true;
+			break;
+		case 'd':
+			options.d_quote = true;
+			break;
+		case 'a':
+			options.pound = true;
+			options.slash = true;
+			options.asterisk = true;
+			options.s_quote = true;
+			options.d_quote = true;
+			break;
+		case 'V':
+			version(argv);
+			exit_after_args = true;
+			return EXIT_SUCCESS;
+		case '?':
+			PRINTE("Invalid option '%s'\n"
+				"Usage: %s [OPTIONS] <FILE>\n"
+				"Try '%s --help' for more information\n\n", \
+				argv[optind - 1], argv[0], argv[0]);
+			return EXIT_FAILURE;
+		case 'h':
+			usage(argv);
+			exit_after_args = true;
+			return EXIT_SUCCESS;
+		default:
+			usage(argv);
+			return EXIT_FAILURE;
 		}
 	}
 
-	if (options.verbose && options.quiet)
-	{
+	if (options.verbose && options.quiet) {
 		usage_short(argv, "Can not have verbose and quiet enabled");
 		return EXIT_FAILURE;
 	}
 
 	/* File name is one less than argc */
-	if (argc - optind == 1)
+	if (argc - optind == 1) {
 		options.file_name = argv[optind];
-	else
-	{
-		if (argc - optind == 0)
-		{
+	} else {
+		if (argc - optind == 0) {
 			usage_short(argv, "File name is missing");
-		}
-		else
-		{
+		} else {
 			/* There are arguments after the file name */
 			usage_short(argv, "Too many arguments");
 		}
@@ -191,13 +165,10 @@ int main(int argc, char *argv[])
 {
 	int rc = EXIT_SUCCESS;
 
-	if (argc < 2)
-	{
+	if (argc < 2) {
 		usage(argv);
 		rc = EXIT_FAILURE;
-	}
-	else
-	{
+	} else {
 		rc = parse_args(argc, argv);
 
 		if (rc == EXIT_SUCCESS && !exit_after_args)

@@ -6,20 +6,19 @@
 #define RIGHT_PARENTHESIS	')'
 #define LEFT_BRACKET		'['
 #define RIGHT_BRACKET		']'
-#define LEFT_BRACE			'{'
-#define RIGHT_BRACE			'}'
+#define LEFT_BRACE		'{'
+#define RIGHT_BRACE		'}'
 
 /* Comments to check for in the file */
-#define POUND_SIGN			'#'
+#define POUND_SIGN		'#'
 #define FORWARD_SLASH		'/'
-#define ASTERISK			'*'
+#define ASTERISK		'*'
 #define SINGLE_QUOTE		'\''
 #define DOUBLE_QUOTE		'\"'
-#define NEWLINE				'\n'
+#define NEWLINE			'\n'
 
 /* Scanning options in comments */
-struct
-{
+struct {
 	bool single;
 	bool multi;
 	bool slash;

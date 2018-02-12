@@ -8,38 +8,38 @@
 struct node *top = NULL;
 
 /*
-	Check if the top of the stack is empty.
-
-	@return	true - stack is empty, false - stack is not empty.
-*/
+ * Check if the top of the stack is empty.
+ *
+ * @return	true - stack is empty, false - stack is not empty.
+ */
 bool is_empty()
 {
 	return (top == NULL);
 }
 
 /*
-	Get the top tag, line or column in the linked list.
-
-	@param	c	option to select node type.
-	@return		top tag, line or column.
-*/
+ * Get the top tag, line or column in the linked list.
+ *
+ * @param	c	option to select node type.
+ * @return		top tag, line or column.
+ */
 static int get_top_tag(int c)
 {
-	if (is_empty())
-	{
+	if (is_empty()) {
 		PRINTE("There are no more open tags\n");
 		return EXIT_FAILURE;
 	}
 
-	switch (c)
-	{
-		case TOP_TAG: return top->tag;
-		case TOP_LINE: return top->line;
-		case TOP_COL: return top->col;
-
-		default:
-			PRINTE("Invalid option in get_top_tag, %c\n", c);
-			return EXIT_FAILURE;
+	switch (c) {
+	case TOP_TAG:
+		return top->tag;
+	case TOP_LINE:
+		return top->line;
+	case TOP_COL:
+		return top->col;
+	default:
+		PRINTE("Invalid option in get_top_tag, %c\n", c);
+		return EXIT_FAILURE;
 	}
 
 	/* Should never get here */
@@ -47,21 +47,20 @@ static int get_top_tag(int c)
 }
 
 /*
-	Add tag
-
-	Adds a new open tag to the stack.
-
-	@param	tag		tag to add.
-	@param	line	line to add.
-	@param	col		column to add.
-	@return			exit_success or exit_failure.
-*/
+ * Add tag
+ *
+ * Adds a new open tag to the stack.
+ *
+ * @param	tag		tag to add.
+ * @param	line		line to add.
+ * @param	col		column to add.
+ * @return			exit_success or exit_failure.
+ */
 int add_to_top(char tag, int line, int col)
 {
 	struct node *new_node = malloc(sizeof(struct node));
 
-	if (new_node == NULL)
-	{
+	if (new_node == NULL) {
 		PRINTE("No memory to add a new tag\n");
 		return EXIT_FAILURE;
 	}
@@ -79,25 +78,24 @@ int add_to_top(char tag, int line, int col)
 }
 
 /*
-	Remove tag
-
-	Checks to see if the current closing tag matches the opening tag.
-	If not, displays an error showing the unexpected close tag and
-	what tag was expected. Otherwise, it frees that tag from the stack.
-
-	@param	tag		tag to remove.
-	@param	line	line number of the tag.
-	@param	col		column number of the tag.
-	@return			exit_success or exit_failure.
-*/
+ * Remove tag
+ *
+ * Checks to see if the current closing tag matches the opening tag.
+ * If not, displays an error showing the unexpected close tag and
+ * what tag was expected. Otherwise, it frees that tag from the stack.
+ *
+ * @param	tag		tag to remove.
+ * @param	line		line number of the tag.
+ * @param	col		column number of the tag.
+ * @return			exit_success or exit_failure.
+ */
 int remove_from_top(int tag, int line, int col)
 {
-	if (is_empty())
-	{
+	if (is_empty()) {
 		/*
-			Can not show the problem tag here as it will always show
-			one of the last tags even if that is not the problem.
-		*/
+		 * Can not show the problem tag here as it will always show
+		 * one of the last tags even if that is not the problem.
+		 */
 
 		/* fprintf(stderr, "Error: No more open tags for close tag, %c ", ch);
 		fprintf(stderr, "on line %d column %d\n", line, col); */

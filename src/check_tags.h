@@ -2,8 +2,7 @@
 #define CHECK_TAGS_H
 
 /* Program argument options */
-struct
-{
+struct {
 	const char *file_name;
 	bool verbose;
 	bool quiet;

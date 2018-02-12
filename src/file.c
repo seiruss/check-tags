@@ -7,11 +7,11 @@
 #include "check_tags.h"
 
 /*
-	Opens a file in read-only.
+ * Opens a file in read-only.
 
-	@param	filename	file name from argv[1].
-	@return				file pointer to filename.
-*/
+ * @param	filename	file name from argv[1].
+ * @return			file pointer to filename.
+ */
 static FILE *open_file(const char *filename)
 {
 	PRINTV("Opening file, %s\n", filename);
@@ -21,15 +21,15 @@ static FILE *open_file(const char *filename)
 }
 
 /*
-	Checks if in a multi line comment and if it should be terminated.
-	Returns true even on characters that end the multi line comment.
-	This is because that character would be scanned when it should not be.
-
-	@param	ch		character to process.
-	@param	prev	previous character seen.
-	@param	fp		file stream.
-	@return			true if in multi comment, false if not.
-*/
+ * Checks if in a multi line comment and if it should be terminated.
+ * Returns true even on characters that end the multi line comment.
+ * This is because that character would be scanned when it should not be.
+ *
+ * @param	ch		character to process.
+ * @param	prev		previous character seen.
+ * @param	fp		file stream.
+ * @return			true if in multi comment, false if not.
+ */
 static bool in_multi_comment(int ch, int prev, FILE *fp)
 {
 	if (!comments.multi)
@@ -63,11 +63,11 @@ static bool in_multi_comment(int ch, int prev, FILE *fp)
 }
 
 /*
-	Scans the file for tags and adds or removes them in a linked list.
-	Verifies the stack is empty and prints the relevant message.
-
-	@return		exit_success or exit_failure.
-*/
+ * Scans the file for tags and adds or removes them in a linked list.
+ * Verifies the stack is empty and prints the relevant message.
+ *
+ * @return		exit_success or exit_failure.
+ */
 int scan_file()
 {
 	int ch;		/* int, not char, to handle EOF */
@@ -76,110 +76,93 @@ int scan_file()
 	int prev = 0;
 
 	FILE *fp = open_file(options.file_name);
-	if (fp == NULL)
-	{
+	if (fp == NULL) {
 		PRINTE("Can not open file\n");
 		return EXIT_FAILURE;
-	}
-	else
+	} else {
 		PRINTV("Opened file, %s\n", options.file_name);
+	}
 
 	/* Verbose header */
-	if (options.verbose)
-		PRINTV("\n%20s %6s\n", "Line", "Col");
+	PRINTV("\n%20s %6s\n", "Line", "Col");
 
 	/* Main loop to scan file */
-	while ((ch = fgetc(fp)) != EOF)
-	{
+	while ((ch = fgetc(fp)) != EOF) {
 		++column;
 
 		/* Must scan newline for single comment, line number, column */
-		if (ch != NEWLINE)
-		{
+		if (ch != NEWLINE) {
 			/* Ignore spaces, tabs, letters and numbers for performance */
 			if (isblank(ch) || isalnum(ch))
 				continue;
 
 			/* Ignore all characters that do not end comments */
-			if (comments.single || in_multi_comment(ch, prev, fp))
-			{
+			if (comments.single || in_multi_comment(ch, prev, fp)) {
 				prev = ch;	/* terminates multi comment */
 				continue;
 			}
 		}
 
-		switch (ch)
-		{
-			case NEWLINE:
-				++line;
-				column = 0;
-				comments.single = false;
-				break;
-
-			case LEFT_PARENTHESIS:
-			case LEFT_BRACKET:
-			case LEFT_BRACE:
-				if (!comments.single && !comments.multi)
-					if (add_to_top(ch, line, column))
-						return EXIT_FAILURE;
-				break;
-
-			case RIGHT_PARENTHESIS:
-			case RIGHT_BRACKET:
-			case RIGHT_BRACE:
-				if (!comments.single && !comments.multi)
-					if (remove_from_top(ch, line, column))
-						return EXIT_FAILURE;
-				break;
-
-			case POUND_SIGN:
-				if (options.pound)
-					comments.single = true;
-				break;
-
-			case FORWARD_SLASH:
-				if (prev == FORWARD_SLASH && options.slash)
-					comments.single = true;
-				break;
-
-			case ASTERISK:
-				if (prev == FORWARD_SLASH && options.asterisk && \
-					!comments.s_quote && !comments.d_quote)
-				{
-					comments.multi = true;
-					comments.slash = true;
-				}
-				break;
-
-			case SINGLE_QUOTE:
-				if (options.s_quote && !comments.slash && !comments.d_quote)
-				{
+		switch (ch) {
+		case NEWLINE:
+			++line;
+			column = 0;
+			comments.single = false;
+			break;
+		case LEFT_PARENTHESIS:
+		case LEFT_BRACKET:
+		case LEFT_BRACE:
+			if (!comments.single && !comments.multi)
+				if (add_to_top(ch, line, column))
+					return EXIT_FAILURE;
+			break;
+		case RIGHT_PARENTHESIS:
+		case RIGHT_BRACKET:
+		case RIGHT_BRACE:
+			if (!comments.single && !comments.multi)
+				if (remove_from_top(ch, line, column))
+					return EXIT_FAILURE;
+			break;
+		case POUND_SIGN:
+			if (options.pound)
+				comments.single = true;
+			break;
+		case FORWARD_SLASH:
+			if (prev == FORWARD_SLASH && options.slash)
+				comments.single = true;
+			break;
+		case ASTERISK:
+			if (prev == FORWARD_SLASH && options.asterisk && \
+				!comments.s_quote && !comments.d_quote)
+			{
+				comments.multi = true;
+				comments.slash = true;
+			}
+			break;
+		case SINGLE_QUOTE:
+			if (options.s_quote && !comments.slash && !comments.d_quote) {
 					comments.multi = true;
 					comments.s_quote = true;
-				}
-				break;
-
-			case DOUBLE_QUOTE:
-				if (options.d_quote && !comments.slash && !comments.s_quote)
-				{
-					comments.multi = true;
-					comments.d_quote = true;
-				}
-				break;
-
-			default:
-				break;
+			}
+			break;
+		case DOUBLE_QUOTE:
+			if (options.d_quote && !comments.slash && !comments.s_quote) {
+				comments.multi = true;
+				comments.d_quote = true;
+			}
+			break;
+		default:
+			break;
 		}
 
 		prev = ch;
 	}
 
-	if (!is_empty())
-	{
+	if (!is_empty()) {
 		/*
-			Can not show the problem tag here as it will always show
-			the top most tag even if it is not the problem tag.
-		*/
+		 * Can not show the problem tag here as it will always show
+		 * the top most tag even if it is not the problem tag.
+		 */
 
 		/* fprintf(stderr, "Tag: %c on line %d column %d\n", \
 			get_top_tag(), get_top_line(), get_top_col()); */

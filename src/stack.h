@@ -5,8 +5,7 @@
 #define TOP_LINE	'l'
 #define TOP_COL		'c'
 
-struct node
-{
+struct node {
 	char tag;
 	int line;
 	int col;
